@@ -3,13 +3,13 @@
 // For the full copyright and license information, please view the LICENSE-*
 // files that was distributed with this source code.
 
-use crate::utils::format_failure_to_read_input_file;
 use std::env::{self, ArgsOs};
 use std::ffi::OsString;
 use std::io::{BufRead, BufReader, BufWriter, Read, Write};
 use std::iter::Peekable;
 use std::process::ExitCode;
 use std::{cmp, fs, io};
+use uucore::utils::format_failure_to_read_input_file;
 
 #[cfg(unix)]
 use std::os::fd::{AsRawFd, FromRawFd};
@@ -477,7 +477,7 @@ pub fn main(opts: Peekable<ArgsOs>) -> ExitCode {
 
 #[inline]
 fn format_octal(byte: u8, buf: &mut [u8; 3]) -> &str {
-    *buf = [b' ', b' ', b'0'];
+    *buf = *b"  0";
 
     let mut num = byte;
     let mut idx = 2; // Start at the last position in the buffer
@@ -706,8 +706,8 @@ fn report_difference(
     };
     print!(
         "{} {} differ: {term} {}, line {}",
-        &params.from.to_string_lossy(),
-        &params.to.to_string_lossy(),
+        params.from.to_string_lossy(),
+        params.to.to_string_lossy(),
         at_byte,
         at_line
     );
